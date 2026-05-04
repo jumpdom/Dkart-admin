@@ -3,59 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dkart | Secure Admin Panel</title>
+    <title>Dkart Admin | Saman Add Karein</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #eef2f5; margin: 0; padding: 20px; }
-        .admin-container { max-width: 500px; margin: auto; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
-        h2 { color: #2874f0; text-align: center; margin-bottom: 20px; }
-        label { display: block; margin-bottom: 5px; font-weight: bold; color: #555; font-size: 14px; }
-        input, select, textarea, button { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; }
-        textarea { height: 80px; resize: none; }
-        .img-tip { font-size: 12px; color: #666; margin-top: -10px; margin-bottom: 15px; }
-        .img-tip a { color: #2874f0; font-weight: bold; text-decoration: none; }
-        button { background: #2874f0; color: white; border: none; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.3s; }
-        button:hover { background: #1a5abd; }
-        #msg { text-align: center; font-weight: bold; padding: 10px; border-radius: 4px; display: none; }
+        body { font-family: sans-serif; background: #f4f4f4; padding: 20px; }
+        .box { max-width: 400px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        h2 { text-align: center; color: #2874f0; }
+        input, select, textarea, button { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; }
+        button { background: #2874f0; color: white; font-weight: bold; cursor: pointer; border: none; }
+        .link-note { font-size: 12px; color: #666; }
     </style>
 </head>
 <body>
 
-<div class="admin-container">
-    <h2>🔐 Dkart Control Panel</h2>
-    <div id="msg"></div>
+<div class="box">
+    <h2>📦 Saman Add Karein</h2>
+    
+    <label>Admin Password:</label>
+    <input type="password" id="adminPass" placeholder="Password daalein">
 
-    <label>Admin Password</label>
-    <input type="password" id="pass" placeholder="Enter Secret Password">
+    <label>Product Name:</label>
+    <input type="text" id="name" placeholder="Jaise: Men Shirt">
 
-    <hr style="margin-bottom: 20px; border: 0; border-top: 1px solid #eee;">
+    <label>Price (₹):</label>
+    <input type="number" id="price" placeholder="Jaise: 499">
 
-    <label>Product Name</label>
-    <input type="text" id="pName" placeholder="e.g. Designer Men Shirt">
-
-    <label>Price (₹)</label>
-    <input type="number" id="pPrice" placeholder="e.g. 499">
-
-    <label>Category</label>
-    <select id="pCat">
-        <option value="men">Men Fashion</option>
-        <option value="women">Women Fashion</option>
-        <option value="gadgets">Gadgets & Tech</option>
+    <label>Category:</label>
+    <select id="cat">
+        <option value="men">Men</option>
+        <option value="women">Women</option>
+        <option value="gadgets">Gadgets</option>
     </select>
 
-    <label>Description (Details)</label>
-    <textarea id="pDesc" placeholder="Saman ke baare mein likhein (Size, Fabric, etc.)"></textarea>
+    <label>Saman ki Details:</label>
+    <textarea id="desc" placeholder="Size, Colour, etc."></textarea>
 
-    <label>Photo Link (URL)</label>
-    <input type="text" id="pImg" placeholder="https://...">
-    <div class="img-tip">Tip: Pehle photo <a href="https://postimages.org/" target="_blank">Yahan Upload Karein</a> phir "Direct Link" copy karke yahan daalein.</div>
+    <label>Photo ka Link:</label>
+    <input type="text" id="img" placeholder="http://image-link.com">
+    <p class="link-note">Note: Photo <a href="https://postimages.org/" target="_blank">Yahan Upload Karein</a> aur "Direct Link" copy karke yahan daalein.</p>
 
-    <button onclick="saveToFirebase()">Live Karein Website Par</button>
+    <button onclick="uploadNow()">Website Par Live Karein</button>
+    <p id="status" style="text-align:center; font-weight:bold;"></p>
 </div>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
     import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
 
+    // Aapka Firebase Config
     const firebaseConfig = {
       apiKey: "AIzaSyAchWzhIxqmS7G0HPpvuq6WBwcr8pXzFAE",
       authDomain: "dkart-87860.firebaseapp.com",
@@ -68,47 +62,33 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    window.saveToFirebase = async function() {
-        const pass = document.getElementById('pass').value;
-        const name = document.getElementById('pName').value;
-        const price = document.getElementById('pPrice').value;
-        const cat = document.getElementById('pCat').value;
-        const desc = document.getElementById('pDesc').value;
-        const img = document.getElementById('pImg').value;
-        const msg = document.getElementById('msg');
+    window.uploadNow = async function() {
+        const pass = document.getElementById('adminPass').value;
+        const n = document.getElementById('name').value;
+        const p = document.getElementById('price').value;
+        const c = document.getElementById('cat').value;
+        const d = document.getElementById('desc').value;
+        const i = document.getElementById('img').value;
+        const st = document.getElementById('status');
 
-        // PASSWORD CHECK (Aap ise badal sakte hain)
-        if(pass !== "Amit@123") { 
-            showMsg("❌ Galat Password!", "red");
-            return; 
-        }
+        if(pass !== "Amit@123") { alert("Galat Password!"); return; }
+        if(!n || !p || !i) { alert("Please sab bhariye!"); return; }
 
-        if(!name || !price || !img) { 
-            showMsg("⚠️ Name, Price aur Photo zaroori hai!", "orange");
-            return; 
-        }
-
-        showMsg("⏳ Upload ho raha hai...", "blue");
-
+        st.innerText = "⏳ Uploading...";
         try {
             await addDoc(collection(db, "products"), {
-                name, price, category: cat, desc, imgUrl: img, date: new Date()
+                name: n, price: p, category: c, desc: d, imgUrl: i, time: new Date()
             });
-            showMsg("✅ Product Live Ho Gaya!", "green");
-            // Form clear karein
-            document.getElementById('pName').value = '';
-            document.getElementById('pPrice').value = '';
-            document.getElementById('pDesc').value = '';
-            document.getElementById('pImg').value = '';
+            st.style.color = "green";
+            st.innerText = "✅ Saman Live Ho Gaya!";
+            // Form saaf karein
+            document.getElementById('name').value = "";
+            document.getElementById('price').value = "";
+            document.getElementById('img').value = "";
         } catch (e) {
-            showMsg("❌ Error: " + e.message, "red");
+            st.style.color = "red";
+            st.innerText = "Error: " + e.message;
         }
-    }
-
-    function showMsg(text, color) {
-        msg.innerText = text;
-        msg.style.display = "block";
-        msg.style.color = color;
     }
 </script>
 </body>
