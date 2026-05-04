@@ -3,162 +3,160 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dkart Admin Pro</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>Dkart Admin | Control Panel</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-        :root { --primary: #2874f0; --secondary: #fb641b; --danger: #d9534f; }
-        body { font-family: 'Segoe UI', sans-serif; background: #f4f7f9; margin: 0; padding: 20px; }
-        .container { max-width: 1000px; margin: auto; }
+        :root { --primary: #2979ff; --bg: #f8faff; --card: #ffffff; }
+        body { font-family: 'Poppins', sans-serif; background: var(--bg); margin: 0; padding: 20px; color: #333; }
         
-        /* Tabs Styling */
-        .tabs { display: flex; gap: 10px; margin-bottom: 20px; }
-        .tab-btn { padding: 12px 25px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; background: #ddd; }
-        .tab-btn.active { background: var(--primary); color: white; }
+        .nav-buttons { display: flex; gap: 10px; margin-bottom: 25px; justify-content: center; }
+        .btn-nav { padding: 12px 20px; border-radius: 10px; border: none; font-weight: 600; cursor: pointer; flex: 1; max-width: 200px; transition: 0.3s; }
+        .btn-blue { background: var(--primary); color: white; }
+        .btn-gray { background: #e0e0e0; color: #666; }
 
+        .container { background: var(--card); border-radius: 25px; padding: 25px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); max-width: 500px; margin: 0 auto; }
+        h2 { font-weight: 800; font-size: 24px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+        
         .section { display: none; }
         .section.active { display: block; }
 
-        .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); margin-bottom: 20px; }
-        label { display: block; font-size: 13px; font-weight: 600; margin-top: 10px; color: #555; }
-        input, select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; margin-top: 5px; box-sizing: border-box; }
-        
-        .btn-main { background: var(--primary); color: white; border: none; padding: 15px; width: 100%; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 20px; }
-        
-        /* Order Styling */
-        .order-card { border: 1px solid #eee; padding: 15px; border-radius: 10px; margin-bottom: 15px; position: relative; background: #fff; }
-        .del-btn { position: absolute; top: 15px; right: 15px; background: var(--danger); color: white; border: none; padding: 8px 12px; border-radius: 5px; cursor: pointer; }
+        /* Form Styling */
+        .form-group { margin-bottom: 15px; }
+        label { display: block; font-size: 13px; font-weight: 600; color: #666; margin-bottom: 5px; }
+        input, select, textarea { width: 100%; padding: 12px; border: 1px solid #eee; border-radius: 12px; background: #fdfdfd; font-family: inherit; }
+        .row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+        .btn-submit { background: var(--primary); color: white; border: none; padding: 15px; width: 100%; border-radius: 15px; font-weight: 700; font-size: 16px; margin-top: 10px; cursor: pointer; }
+
+        /* Order Card Styling */
+        .order-card { background: #fff; border: 1px solid #eee; border-radius: 18px; padding: 15px; margin-bottom: 15px; position: relative; }
+        .order-header { color: var(--primary); font-weight: 800; border-bottom: 1px solid #f0f0f0; padding-bottom: 8px; margin-bottom: 10px; display: flex; justify-content: space-between; }
+        .order-detail { font-size: 13px; margin: 4px 0; }
+        .order-detail b { color: #555; }
+        .status-badge { background: #e8f5e9; color: #2e7d32; padding: 4px 10px; border-radius: 8px; font-size: 11px; font-weight: 700; }
+        .delete-order { color: #ff1744; font-size: 18px; cursor: pointer; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div class="tabs">
-        <button class="tab-btn active" onclick="showTab('add-product')">Add Product</button>
-        <button class="tab-btn" onclick="showTab('view-orders')">Orders Management</button>
+    <div class="nav-buttons">
+        <button id="addBtn" class="btn-nav btn-blue" onclick="switchTab('add-section', this)">Add Product</button>
+        <button id="orderBtn" class="btn-nav btn-gray" onclick="switchTab('order-section', this)">Orders Management</button>
     </div>
 
-    <!-- Section 1: Add Product -->
-    <div id="add-product" class="section active">
-        <div class="card">
-            <h2><i class="fas fa-plus"></i> Naya Saman Add Karein</h2>
+    <!-- Add Product Section -->
+    <div id="add-section" class="container section active">
+        <h2><i class="fa-solid fa-plus"></i> Naya Saman Add Karein</h2>
+        <div class="form-group">
             <label>Product Name</label>
             <input type="text" id="pName" placeholder="Ex: Cotton Shirt">
-            
-            <div style="display:flex; gap:10px;">
-                <div style="flex:1;">
-                    <label>Price (₹)</label>
-                    <input type="number" id="pPrice" placeholder="599">
-                </div>
-                <div style="flex:1;">
-                    <label>Category</label>
-                    <select id="pCat">
-                        <option value="Men">Men</option>
-                        <option value="Women">Women</option>
-                        <option value="Gadgets">Gadgets</option>
-                    </select>
-                </div>
-            </div>
-
-            <div style="display:flex; gap:10px;">
-                <div style="flex:1;">
-                    <label>Sizes (S, M, L...)</label>
-                    <input type="text" id="pSizes" placeholder="M, L, XL">
-                </div>
-                <div style="flex:1;">
-                    <label>Colours</label>
-                    <input type="text" id="pColors" placeholder="Black, White">
-                </div>
-            </div>
-
-            <label>Photo 1 (Main)</label>
-            <input type="text" id="img1" placeholder="Direct Link 1">
-            <label>Photo 2</label>
-            <input type="text" id="img2" placeholder="Direct Link 2">
-            <label>Photo 3</label>
-            <input type="text" id="img3" placeholder="Direct Link 3">
-
-            <button class="btn-main" onclick="uploadProduct()">Website Par Live Karein</button>
         </div>
+        <div class="row">
+            <div class="form-group"><label>Price (₹)</label><input type="number" id="pPrice" placeholder="599"></div>
+            <div class="form-group">
+                <label>Category</label>
+                <select id="pCat">
+                    <option>Men</option><option>Women</option><option>Shoes</option><option>Electronics</option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group"><label>Sizes</label><input type="text" id="pSize" placeholder="M, L, XL"></div>
+            <div class="form-group"><label>Colours</label><input type="text" id="pColor" placeholder="Black, White"></div>
+        </div>
+        <div class="form-group"><label>Photo 1 (Main)</label><input type="text" id="pImg1" placeholder="Direct Link 1"></div>
+        <div class="form-group"><label>Photo 2</label><input type="text" id="pImg2" placeholder="Direct Link 2"></div>
+        <button class="btn-submit" onclick="saveProduct()">Website Par Live Karein</button>
     </div>
 
-    <!-- Section 2: View Orders -->
-    <div id="view-orders" class="section">
-        <div class="card">
-            <h2><i class="fas fa-shopping-bag"></i> Customer Orders</h2>
-            <div id="ordersList">Loading...</div>
-        </div>
+    <!-- Orders Management Section -->
+    <div id="order-section" class="container section">
+        <h2><i class="fa-solid fa-bag-shopping"></i> Customer Orders</h2>
+        <div id="orderList">Loading orders...</div>
     </div>
-</div>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
-    import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, orderBy, query } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, orderBy, query, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
 
+    // Same Firebase Config as your Public Web
     const firebaseConfig = {
       apiKey: "AIzaSyAchWzhIxqmS7G0HPpvuq6WBwcr8pXzFAE",
       authDomain: "dkart-87860.firebaseapp.com",
       projectId: "dkart-87860",
       storageBucket: "dkart-87860.firebasestorage.app",
-      messagingSenderId: "894407834952",
       appId: "1:894407834952:web:3067589b758c9819fe877d"
     };
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    // Tab Switching
-    window.showTab = function(tabId) {
+    // Tab Switching Logic
+    window.switchTab = (id, btn) => {
         document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        document.getElementById(tabId).classList.add('active');
-        event.currentTarget.classList.add('active');
-        if(tabId === 'view-orders') loadOrders();
+        document.querySelectorAll('.btn-nav').forEach(b => { b.classList.remove('btn-blue'); b.classList.add('btn-gray'); });
+        
+        document.getElementById(id).classList.add('active');
+        btn.classList.add('btn-blue');
+        btn.classList.remove('btn-gray');
+
+        if(id === 'order-section') loadOrders();
     }
 
-    // 1. Upload Product
-    window.uploadProduct = async function() {
-        const name = document.getElementById('pName').value;
-        const price = document.getElementById('pPrice').value;
-        const images = [document.getElementById('img1').value];
-        if(document.getElementById('img2').value) images.push(document.getElementById('img2').value);
-        if(document.getElementById('img3').value) images.push(document.getElementById('img3').value);
-
+    // Save New Product
+    window.saveProduct = async () => {
+        const productData = {
+            name: document.getElementById('pName').value,
+            price: document.getElementById('pPrice').value,
+            category: document.getElementById('pCat').value,
+            images: [document.getElementById('pImg1').value, document.getElementById('pImg2').value],
+            time: serverTimestamp()
+        };
         try {
-            await addDoc(collection(db, "products"), {
-                name, price, images,
-                category: document.getElementById('pCat').value,
-                sizes: document.getElementById('pSizes').value.split(','),
-                colors: document.getElementById('pColors').value.split(','),
-                time: new Date()
-            });
-            alert("Product Added!");
+            await addDoc(collection(db, "products"), productData);
+            alert("Product Live Ho Gaya! ✅");
             location.reload();
-        } catch(e) { alert(e.message); }
+        } catch(e) { alert("Error adding product."); }
     }
 
-    // 2. Load & Save Orders
+    // Load Orders from Database
     async function loadOrders() {
-        const list = document.getElementById('ordersList');
-        const q = query(collection(db, "orders"), orderBy("time", "desc"));
-        const snap = await getDocs(q);
-        list.innerHTML = snap.empty ? "No orders yet." : "";
-
-        snap.forEach(res => {
-            const ord = res.data();
-            list.innerHTML += `
-                <div class="order-card">
-                    <button class="del-btn" onclick="deleteOrder('${res.id}')">Delete</button>
-                    <strong>${ord.customerName}</strong> (${ord.customerPhone})<br>
-                    <small>${ord.time.toDate().toLocaleString()}</small><br>
-                    <p><b>Product:</b> ${ord.productName} - ₹${ord.price}</p>
-                    <p><b>Address:</b> ${ord.address}</p>
-                </div>`;
-        });
+        const orderDiv = document.getElementById('orderList');
+        orderDiv.innerHTML = "Fetching orders...";
+        
+        try {
+            const q = query(collection(db, "orders"), orderBy("orderDate", "desc"));
+            const snap = await getDocs(q);
+            
+            if(snap.empty) { orderDiv.innerHTML = "No orders yet."; return; }
+            
+            orderDiv.innerHTML = "";
+            snap.forEach(res => {
+                const o = res.data();
+                const oId = res.id;
+                orderDiv.innerHTML += `
+                    <div class="order-card">
+                        <div class="order-header">
+                            <span>#${o.productName}</span>
+                            <i class="fa-solid fa-trash delete-order" onclick="deleteOrder('${oId}')"></i>
+                        </div>
+                        <div class="order-detail"><b>Customer:</b> ${o.customerName}</div>
+                        <div class="order-detail"><b>Phone:</b> ${o.customerPhone}</div>
+                        <div class="order-detail"><b>Address:</b> ${o.customerAddress}</div>
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:10px;">
+                            <span class="status-badge">₹${o.productPrice}</span>
+                            <span style="font-size:10px; color:#999;">${o.orderDate ? o.orderDate.toDate().toLocaleDateString() : ''}</span>
+                        </div>
+                    </div>
+                `;
+            });
+        } catch(e) { orderDiv.innerHTML = "Error loading orders."; }
     }
 
-    // 3. Delete Order (Only when you click)
-    window.deleteOrder = async function(id) {
-        if(confirm("Kya aap ye order delete karna chahte hain?")) {
+    // Delete Order
+    window.deleteOrder = async (id) => {
+        if(confirm("Kiya aap ye order hatana chahte hain?")) {
             await deleteDoc(doc(db, "orders", id));
             loadOrders();
         }
