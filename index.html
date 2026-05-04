@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dkart | Online Shopping</title>
+    <style>
+        body { margin: 0; font-family: sans-serif; background: #f1f3f6; }
+        .navbar { background: #2874f0; color: white; padding: 10px; position: sticky; top: 0; z-index: 100; }
+        .brand { font-size: 22px; font-weight: bold; font-style: italic; }
+        .search-bar { background: white; margin-top: 8px; display: flex; border-radius: 2px; }
+        .search-bar input { border: none; padding: 8px; flex: 1; outline: none; }
+        .container { padding: 10px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+        .card { background: white; border-radius: 4px; overflow: hidden; border: 1px solid #ddd; display: flex; flex-direction: column; }
+        .card img { width: 100%; height: 150px; object-fit: contain; }
+        .info { padding: 8px; }
+        .price { font-size: 16px; font-weight: bold; margin: 5px 0; }
+        .buy-btn { background: #fb641b; color: white; border: none; padding: 10px; width: 100%; font-weight: bold; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="brand">Dkart</div>
+        <div class="search-bar"><input type="text" placeholder="Search for products..."></div>
+    </div>
+
+    <div class="container" id="product-list">
+        <p style="grid-column: 1/3; text-align: center;">Saman load ho raha hai...</p>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
+        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+          apiKey: "AIzaSyAchWzhIxqmS7G0HPpvuq6WBwcr8pXzFAE",
+          authDomain: "dkart-87860.firebaseapp.com",
+          projectId: "dkart-87860",
+          storageBucket: "dkart-87860.firebasestorage.app",
+          messagingSenderId: "894407834952",
+          appId: "1:894407834952:web:3067589b758c9819fe877d"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        async function getProducts() {
+            const list = document.getElementById('product-list');
+            const querySnapshot = await getDocs(collection(db, "products"));
+            list.innerHTML = "";
+            querySnapshot.forEach((doc) => {
+                const data = doc.data();
+                list.innerHTML += `
+                    <div class="card">
+                        <img src="${data.imgUrl}">
+                        <div class="info">
+                            <div style="font-size:13px;">${data.name}</div>
+                            <div class="price">₹${data.price}</div>
+                        </div>
+                        <button class="buy-btn" onclick="window.open('https://wa.me/918521684137?text=Mujhe ye kharidna hai: ${data.name}')">Buy Now</button>
+                    </div>`;
+            });
+        }
+        getProducts();
+    </script>
+</body>
+</html>
