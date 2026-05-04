@@ -3,76 +3,96 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dkart Admin | Pro Dashboard</title>
+    <title>Dkart Admin Pro</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --primary: #2874f0; --secondary: #fb641b; }
-        body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; margin: 0; padding: 20px; }
-        .container { max-width: 900px; margin: auto; }
-        .card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-bottom: 25px; }
-        h2 { color: var(--primary); border-bottom: 2px solid #eee; padding-bottom: 10px; margin-top: 0; }
-        label { display: block; font-size: 13px; font-weight: 600; margin: 10px 0 5px; color: #555; }
-        input, select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
-        .btn-upload { background: var(--primary); color: white; border: none; padding: 15px; width: 100%; font-weight: bold; border-radius: 8px; cursor: pointer; margin-top: 20px; }
-        .multi-row { display: flex; gap: 10px; }
-        .multi-row > div { flex: 1; }
-        .size-chips { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 5px; }
+        :root { --primary: #2874f0; --secondary: #fb641b; --danger: #d9534f; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f7f9; margin: 0; padding: 20px; }
+        .container { max-width: 1000px; margin: auto; }
+        
+        /* Tabs Styling */
+        .tabs { display: flex; gap: 10px; margin-bottom: 20px; }
+        .tab-btn { padding: 12px 25px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; background: #ddd; }
+        .tab-btn.active { background: var(--primary); color: white; }
+
+        .section { display: none; }
+        .section.active { display: block; }
+
+        .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        label { display: block; font-size: 13px; font-weight: 600; margin-top: 10px; color: #555; }
+        input, select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; margin-top: 5px; box-sizing: border-box; }
+        
+        .btn-main { background: var(--primary); color: white; border: none; padding: 15px; width: 100%; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 20px; }
+        
+        /* Order Styling */
+        .order-card { border: 1px solid #eee; padding: 15px; border-radius: 10px; margin-bottom: 15px; position: relative; background: #fff; }
+        .del-btn { position: absolute; top: 15px; right: 15px; background: var(--danger); color: white; border: none; padding: 8px 12px; border-radius: 5px; cursor: pointer; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div class="card">
-        <h2><i class="fas fa-plus-circle"></i> Add Product (Advanced)</h2>
-        
-        <label>Product Name</label>
-        <input type="text" id="name" placeholder="Ex: Cotton Slim Fit T-Shirt">
+    <div class="tabs">
+        <button class="tab-btn active" onclick="showTab('add-product')">Add Product</button>
+        <button class="tab-btn" onclick="showTab('view-orders')">Orders Management</button>
+    </div>
 
-        <div class="multi-row">
-            <div>
-                <label>Price (₹)</label>
-                <input type="number" id="price" placeholder="499">
+    <!-- Section 1: Add Product -->
+    <div id="add-product" class="section active">
+        <div class="card">
+            <h2><i class="fas fa-plus"></i> Naya Saman Add Karein</h2>
+            <label>Product Name</label>
+            <input type="text" id="pName" placeholder="Ex: Cotton Shirt">
+            
+            <div style="display:flex; gap:10px;">
+                <div style="flex:1;">
+                    <label>Price (₹)</label>
+                    <input type="number" id="pPrice" placeholder="599">
+                </div>
+                <div style="flex:1;">
+                    <label>Category</label>
+                    <select id="pCat">
+                        <option value="Men">Men</option>
+                        <option value="Women">Women</option>
+                        <option value="Gadgets">Gadgets</option>
+                    </select>
+                </div>
             </div>
-            <div>
-                <label>Category</label>
-                <select id="cat">
-                    <option value="Men">Men Wear</option>
-                    <option value="Women">Women Wear</option>
-                    <option value="Electronics">Electronics</option>
-                </select>
+
+            <div style="display:flex; gap:10px;">
+                <div style="flex:1;">
+                    <label>Sizes (S, M, L...)</label>
+                    <input type="text" id="pSizes" placeholder="M, L, XL">
+                </div>
+                <div style="flex:1;">
+                    <label>Colours</label>
+                    <input type="text" id="pColors" placeholder="Black, White">
+                </div>
             </div>
+
+            <label>Photo 1 (Main)</label>
+            <input type="text" id="img1" placeholder="Direct Link 1">
+            <label>Photo 2</label>
+            <input type="text" id="img2" placeholder="Direct Link 2">
+            <label>Photo 3</label>
+            <input type="text" id="img3" placeholder="Direct Link 3">
+
+            <button class="btn-main" onclick="uploadProduct()">Website Par Live Karein</button>
         </div>
+    </div>
 
-        <!-- Size & Color -->
-        <div class="multi-row">
-            <div>
-                <label>Available Sizes (Comma se alag karein)</label>
-                <input type="text" id="sizes" placeholder="S, M, L, XL">
-            </div>
-            <div>
-                <label>Colours (Comma se alag karein)</label>
-                <input type="text" id="colors" placeholder="Red, Black, Blue">
-            </div>
+    <!-- Section 2: View Orders -->
+    <div id="view-orders" class="section">
+        <div class="card">
+            <h2><i class="fas fa-shopping-bag"></i> Customer Orders</h2>
+            <div id="ordersList">Loading...</div>
         </div>
-
-        <!-- 3 Photo Links -->
-        <label>Photo 1 (Main Image)</label>
-        <input type="text" id="img1" placeholder="Direct Link 1">
-        
-        <label>Photo 2 (Optional)</label>
-        <input type="text" id="img2" placeholder="Direct Link 2">
-        
-        <label>Photo 3 (Optional)</label>
-        <input type="text" id="img3" placeholder="Direct Link 3">
-
-        <button class="btn-upload" onclick="uploadProduct()">Website Par Live Karein</button>
-        <p id="upStatus" style="text-align:center; display:none; font-weight:bold;"></p>
     </div>
 </div>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
-    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, orderBy, query } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyAchWzhIxqmS7G0HPpvuq6WBwcr8pXzFAE",
@@ -86,40 +106,62 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
+    // Tab Switching
+    window.showTab = function(tabId) {
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById(tabId).classList.add('active');
+        event.currentTarget.classList.add('active');
+        if(tabId === 'view-orders') loadOrders();
+    }
+
+    // 1. Upload Product
     window.uploadProduct = async function() {
-        const n = document.getElementById('name').value;
-        const p = document.getElementById('price').value;
-        const c = document.getElementById('cat').value;
-        const s = document.getElementById('sizes').value;
-        const clr = document.getElementById('colors').value;
-        const i1 = document.getElementById('img1').value;
-        const i2 = document.getElementById('img2').value;
-        const i3 = document.getElementById('img3').value;
-        const status = document.getElementById('upStatus');
-
-        if(!n || !p || !i1) { alert("Kam se kam Name, Price aur Pehli Photo zaruri hai!"); return; }
-
-        status.style.display = "block";
-        status.innerHTML = "⏳ Uploading...";
-
-        // Photos ko array mein daalna
-        const imageList = [i1];
-        if(i2) imageList.push(i2);
-        if(i3) imageList.push(i3);
+        const name = document.getElementById('pName').value;
+        const price = document.getElementById('pPrice').value;
+        const images = [document.getElementById('img1').value];
+        if(document.getElementById('img2').value) images.push(document.getElementById('img2').value);
+        if(document.getElementById('img3').value) images.push(document.getElementById('img3').value);
 
         try {
             await addDoc(collection(db, "products"), {
-                name: n,
-                price: p,
-                category: c,
-                sizes: s.split(',').map(item => item.trim()), // "S, M" ko ["S", "M"] bana dega
-                colors: clr.split(',').map(item => item.trim()),
-                images: imageList,
+                name, price, images,
+                category: document.getElementById('pCat').value,
+                sizes: document.getElementById('pSizes').value.split(','),
+                colors: document.getElementById('pColors').value.split(','),
                 time: new Date()
             });
-            status.innerHTML = "✅ Live Successfully!";
-            setTimeout(() => location.reload(), 1500);
-        } catch(e) { alert("Error: " + e.message); }
+            alert("Product Added!");
+            location.reload();
+        } catch(e) { alert(e.message); }
+    }
+
+    // 2. Load & Save Orders
+    async function loadOrders() {
+        const list = document.getElementById('ordersList');
+        const q = query(collection(db, "orders"), orderBy("time", "desc"));
+        const snap = await getDocs(q);
+        list.innerHTML = snap.empty ? "No orders yet." : "";
+
+        snap.forEach(res => {
+            const ord = res.data();
+            list.innerHTML += `
+                <div class="order-card">
+                    <button class="del-btn" onclick="deleteOrder('${res.id}')">Delete</button>
+                    <strong>${ord.customerName}</strong> (${ord.customerPhone})<br>
+                    <small>${ord.time.toDate().toLocaleString()}</small><br>
+                    <p><b>Product:</b> ${ord.productName} - ₹${ord.price}</p>
+                    <p><b>Address:</b> ${ord.address}</p>
+                </div>`;
+        });
+    }
+
+    // 3. Delete Order (Only when you click)
+    window.deleteOrder = async function(id) {
+        if(confirm("Kya aap ye order delete karna chahte hain?")) {
+            await deleteDoc(doc(db, "orders", id));
+            loadOrders();
+        }
     }
 </script>
 </body>
