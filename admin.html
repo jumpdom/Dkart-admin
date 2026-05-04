@@ -3,53 +3,91 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dkart Admin | Saman Add Karein</title>
+    <title>Dkart Admin | Professional Dashboard</title>
     <style>
-        body { font-family: sans-serif; background: #f4f4f4; padding: 20px; }
-        .box { max-width: 400px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-        h2 { text-align: center; color: #2874f0; }
-        input, select, textarea, button { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; }
-        button { background: #2874f0; color: white; font-weight: bold; cursor: pointer; border: none; }
-        .link-note { font-size: 12px; color: #666; }
+        :root { --primary: #2874f0; --secondary: #fb641b; --success: #388e3c; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; margin: 0; padding: 20px; display: flex; justify-content: center; }
+        
+        .admin-card { background: white; width: 100%; max-width: 500px; padding: 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        h2 { text-align: center; color: var(--primary); margin-bottom: 25px; font-weight: 800; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        
+        .form-group { margin-bottom: 15px; }
+        label { display: block; font-size: 13px; font-weight: 600; color: #555; margin-bottom: 5px; }
+        
+        input, select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; transition: 0.3s; box-sizing: border-box; }
+        input:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 8px rgba(40, 116, 240, 0.2); }
+        
+        .photo-section { background: #f9f9f9; padding: 15px; border-radius: 10px; border: 1px dashed #ccc; margin-top: 20px; }
+        .photo-section h4 { margin: 0 0 10px 0; font-size: 14px; color: var(--primary); }
+        
+        button { width: 100%; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 25px; transition: 0.3s; }
+        button:hover { background: #1a5abd; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        button:active { transform: scale(0.98); }
+
+        #status { text-align: center; margin-top: 20px; font-weight: bold; padding: 10px; border-radius: 5px; display: none; }
+        .loading { color: #1565c0; background: #e3f2fd; display: block !important; }
+        .success { color: #2e7d32; background: #e8f5e9; display: block !important; }
     </style>
 </head>
 <body>
 
-<div class="box">
-    <h2>📦 Saman Add Karein</h2>
+<div class="admin-card">
+    <h2>Dkart Admin Panel</h2>
     
-    <label>Admin Password:</label>
-    <input type="password" id="adminPass" placeholder="Password daalein">
+    <div class="form-group">
+        <label>Admin Security Key</label>
+        <input type="password" id="adminPass" placeholder="Amit@123">
+    </div>
 
-    <label>Product Name:</label>
-    <input type="text" id="name" placeholder="Jaise: Men Shirt">
+    <div class="form-group">
+        <label>Product Full Name</label>
+        <input type="text" id="name" placeholder="Ex: Men Slim Fit Cotton Shirt">
+    </div>
 
-    <label>Price (₹):</label>
-    <input type="number" id="price" placeholder="Jaise: 499">
+    <div style="display: flex; gap: 10px;">
+        <div class="form-group" style="flex: 1;">
+            <label>Price (₹)</label>
+            <input type="number" id="price" placeholder="499">
+        </div>
+        <div class="form-group" style="flex: 1;">
+            <label>Category</label>
+            <select id="cat">
+                <option value="men">Men's Fashion</option>
+                <option value="women">Women's Fashion</option>
+                <option value="gadgets">Gadgets & Tech</option>
+            </select>
+        </div>
+    </div>
 
-    <label>Category:</label>
-    <select id="cat">
-        <option value="men">Men</option>
-        <option value="women">Women</option>
-        <option value="gadgets">Gadgets</option>
-    </select>
+    <div class="form-group">
+        <label>Available Sizes</label>
+        <input type="text" id="sizes" placeholder="S, M, L, XL, XXL">
+    </div>
 
-    <label>Saman ki Details:</label>
-    <textarea id="desc" placeholder="Size, Colour, etc."></textarea>
+    <div class="form-group">
+        <label>Available Colours</label>
+        <input type="text" id="colours" placeholder="Red, Blue, Green, White">
+    </div>
 
-    <label>Photo ka Link:</label>
-    <input type="text" id="img" placeholder="http://image-link.com">
-    <p class="link-note">Note: Photo <a href="https://postimages.org/" target="_blank">Yahan Upload Karein</a> aur "Direct Link" copy karke yahan daalein.</p>
+    <div class="photo-section">
+        <h4>🖼️ Product Photos (Max 5)</h4>
+        <input type="text" id="img1" placeholder="Main Image Link (Direct Link)" style="margin-bottom: 8px;">
+        <input type="text" id="img2" placeholder="Second Image Link" style="margin-bottom: 8px;">
+        <input type="text" id="img3" placeholder="Third Image Link" style="margin-bottom: 8px;">
+        <input type="text" id="img4" placeholder="Fourth Image Link" style="margin-bottom: 8px;">
+        <input type="text" id="img5" placeholder="Fifth Image Link">
+        <small style="display:block; margin-top:5px; color:#777;">Postimages se "Direct Link" copy karke yahan daalein.</small>
+    </div>
 
-    <button onclick="uploadNow()">Website Par Live Karein</button>
-    <p id="status" style="text-align:center; font-weight:bold;"></p>
+    <button onclick="uploadNow()">⚡ PUSH TO WEBSITE</button>
+    
+    <div id="status"></div>
 </div>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
     import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
 
-    // Aapka Firebase Config
     const firebaseConfig = {
       apiKey: "AIzaSyAchWzhIxqmS7G0HPpvuq6WBwcr8pXzFAE",
       authDomain: "dkart-87860.firebaseapp.com",
@@ -64,30 +102,48 @@
 
     window.uploadNow = async function() {
         const pass = document.getElementById('adminPass').value;
-        const n = document.getElementById('name').value;
-        const p = document.getElementById('price').value;
-        const c = document.getElementById('cat').value;
-        const d = document.getElementById('desc').value;
-        const i = document.getElementById('img').value;
         const st = document.getElementById('status');
 
-        if(pass !== "Amit@123") { alert("Galat Password!"); return; }
-        if(!n || !p || !i) { alert("Please sab bhariye!"); return; }
+        if(pass !== "Amit@123") { 
+            alert("❌ Galat Security Key!"); 
+            return; 
+        }
 
-        st.innerText = "⏳ Uploading...";
+        const imgList = [
+            document.getElementById('img1').value,
+            document.getElementById('img2').value,
+            document.getElementById('img3').value,
+            document.getElementById('img4').value,
+            document.getElementById('img5').value
+        ].filter(url => url.trim() !== "");
+
+        if(imgList.length === 0) {
+            alert("⚠️ Kam se kam ek photo link zaroori hai!");
+            return;
+        }
+
+        st.className = "loading";
+        st.innerText = "⏳ Connecting to Firebase & Uploading...";
+
         try {
             await addDoc(collection(db, "products"), {
-                name: n, price: p, category: c, desc: d, imgUrl: i, time: new Date()
+                name: document.getElementById('name').value,
+                price: document.getElementById('price').value,
+                category: document.getElementById('cat').value,
+                size: document.getElementById('sizes').value,
+                colour: document.getElementById('colours').value,
+                images: imgList,
+                time: new Date()
             });
-            st.style.color = "green";
-            st.innerText = "✅ Saman Live Ho Gaya!";
-            // Form saaf karein
-            document.getElementById('name').value = "";
-            document.getElementById('price').value = "";
-            document.getElementById('img').value = "";
+            
+            st.className = "success";
+            st.innerText = "✅ Saman Successfully Live Ho Gaya!";
+            
+            setTimeout(() => { location.reload(); }, 2000);
         } catch (e) {
+            st.style.display = "block";
             st.style.color = "red";
-            st.innerText = "Error: " + e.message;
+            st.innerText = "❌ Error: " + e.message;
         }
     }
 </script>
