@@ -3,106 +3,113 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dkart | Admin Control Panel</title>
+    <title>Dkart | Secure Admin Panel</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; padding: 15px; background: #f4f4f4; margin: 0; }
-        .nav { background: #2874f0; color: white; padding: 15px; text-align: center; font-weight: bold; border-radius: 4px; margin-bottom: 15px; }
-        .form-box { background: white; padding: 20px; border-radius: 8px; max-width: 500px; margin: auto; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        .form-box h2 { color: #2874f0; text-align: center; margin-top: 0; }
-        input, select, button { width: 100%; padding: 12px; margin-bottom: 12px; border-radius: 4px; border: 1px solid #ccc; box-sizing: border-box; font-size: 14px; }
-        label { font-weight: bold; font-size: 13px; color: #555; }
-        button { background: #388e3c; color: white; font-weight: bold; cursor: pointer; border: none; font-size: 16px; margin-top: 10px; }
-        button:hover { background: #2e7d32; }
-        #status { text-align: center; font-weight: bold; }
+        body { font-family: 'Segoe UI', sans-serif; background: #eef2f5; margin: 0; padding: 20px; }
+        .admin-container { max-width: 500px; margin: auto; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+        h2 { color: #2874f0; text-align: center; margin-bottom: 20px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; color: #555; font-size: 14px; }
+        input, select, textarea, button { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; }
+        textarea { height: 80px; resize: none; }
+        .img-tip { font-size: 12px; color: #666; margin-top: -10px; margin-bottom: 15px; }
+        .img-tip a { color: #2874f0; font-weight: bold; text-decoration: none; }
+        button { background: #2874f0; color: white; border: none; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        button:hover { background: #1a5abd; }
+        #msg { text-align: center; font-weight: bold; padding: 10px; border-radius: 4px; display: none; }
     </style>
 </head>
 <body>
 
-    <div class="nav">Dkart - Owner Dashboard</div>
+<div class="admin-container">
+    <h2>🔐 Dkart Control Panel</h2>
+    <div id="msg"></div>
 
-    <div class="form-box">
-        <h2>Add Naya Product</h2>
-        <p id="status"></p>
-        
-        <label>1. Product Name</label>
-        <input type="text" id="pName" placeholder="Jaise: Cotton Men Shirt">
-        
-        <label>2. Price (₹)</label>
-        <input type="number" id="pPrice" placeholder="Jaise: 599">
-        
-        <label>3. Category</label>
-        <select id="pCat">
-            <option value="men">Men</option>
-            <option value="women">Women</option>
-            <option value="gadgets">Gadgets</option>
-            <option value="toys">Toys</option>
-        </select>
-        
-        <label>4. Photo Ka Link (GitHub URL)</label>
-        <input type="text" id="pImg" placeholder="Jaise: https://raw.githubusercontent.com/.../Dkart.jpg">
-        
-        <button onclick="uploadProduct()">LIVE KAREIN (Website par daalein)</button>
-    </div>
+    <label>Admin Password</label>
+    <input type="password" id="pass" placeholder="Enter Secret Password">
 
-    <!-- Firebase Connection Logic -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
-        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
+    <hr style="margin-bottom: 20px; border: 0; border-top: 1px solid #eee;">
 
-        // AAPKA CONFIG CODE
-        const firebaseConfig = {
-          apiKey: "AIzaSyAchWzhIxqmS7G0HPpvuq6WBwcr8pXzFAE",
-          authDomain: "dkart-87860.firebaseapp.com",
-          projectId: "dkart-87860",
-          storageBucket: "dkart-87860.firebasestorage.app",
-          messagingSenderId: "894407834952",
-          appId: "1:894407834952:web:3067589b758c9819fe877d",
-          measurementId: "G-0DBRJM7JFN"
-        };
+    <label>Product Name</label>
+    <input type="text" id="pName" placeholder="e.g. Designer Men Shirt">
 
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
+    <label>Price (₹)</label>
+    <input type="number" id="pPrice" placeholder="e.g. 499">
 
-        // Function to upload data
-        window.uploadProduct = async function() {
-            const name = document.getElementById('pName').value;
-            const price = document.getElementById('pPrice').value;
-            const cat = document.getElementById('pCat').value;
-            const img = document.getElementById('pImg').value;
-            const status = document.getElementById('status');
+    <label>Category</label>
+    <select id="pCat">
+        <option value="men">Men Fashion</option>
+        <option value="women">Women Fashion</option>
+        <option value="gadgets">Gadgets & Tech</option>
+    </select>
 
-            if(!name || !price || !cat || !img) {
-                status.innerText = "❌ Saari details bhariye!";
-                status.style.color = "red";
-                return;
-            }
+    <label>Description (Details)</label>
+    <textarea id="pDesc" placeholder="Saman ke baare mein likhein (Size, Fabric, etc.)"></textarea>
 
-            status.innerText = "⏳ Live ho raha hai, wait karein...";
-            status.style.color = "orange";
+    <label>Photo Link (URL)</label>
+    <input type="text" id="pImg" placeholder="https://...">
+    <div class="img-tip">Tip: Pehle photo <a href="https://postimages.org/" target="_blank">Yahan Upload Karein</a> phir "Direct Link" copy karke yahan daalein.</div>
 
-            try {
-                // 'products' collection mein naya document add karein
-                await addDoc(collection(db, "products"), {
-                    name: name,
-                    price: price,
-                    category: cat,
-                    imgUrl: img,
-                    time: new Date()
-                });
+    <button onclick="saveToFirebase()">Live Karein Website Par</button>
+</div>
 
-                status.innerText = "✅ Product Website par LIVE ho gaya!";
-                status.style.color = "green";
-                // Form clear karein
-                document.getElementById('pName').value = '';
-                document.getElementById('pPrice').value = '';
-                document.getElementById('pImg').value = '';
-                
-            } catch (error) {
-                console.error("Error adding document: ", error);
-                status.innerText = "❌ Galti ho gayi! Firestore check karein.";
-                status.style.color = "red";
-            }
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
+    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAchWzhIxqmS7G0HPpvuq6WBwcr8pXzFAE",
+      authDomain: "dkart-87860.firebaseapp.com",
+      projectId: "dkart-87860",
+      storageBucket: "dkart-87860.firebasestorage.app",
+      messagingSenderId: "894407834952",
+      appId: "1:894407834952:web:3067589b758c9819fe877d"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    window.saveToFirebase = async function() {
+        const pass = document.getElementById('pass').value;
+        const name = document.getElementById('pName').value;
+        const price = document.getElementById('pPrice').value;
+        const cat = document.getElementById('pCat').value;
+        const desc = document.getElementById('pDesc').value;
+        const img = document.getElementById('pImg').value;
+        const msg = document.getElementById('msg');
+
+        // PASSWORD CHECK (Aap ise badal sakte hain)
+        if(pass !== "Amit@123") { 
+            showMsg("❌ Galat Password!", "red");
+            return; 
         }
-    </script>
+
+        if(!name || !price || !img) { 
+            showMsg("⚠️ Name, Price aur Photo zaroori hai!", "orange");
+            return; 
+        }
+
+        showMsg("⏳ Upload ho raha hai...", "blue");
+
+        try {
+            await addDoc(collection(db, "products"), {
+                name, price, category: cat, desc, imgUrl: img, date: new Date()
+            });
+            showMsg("✅ Product Live Ho Gaya!", "green");
+            // Form clear karein
+            document.getElementById('pName').value = '';
+            document.getElementById('pPrice').value = '';
+            document.getElementById('pDesc').value = '';
+            document.getElementById('pImg').value = '';
+        } catch (e) {
+            showMsg("❌ Error: " + e.message, "red");
+        }
+    }
+
+    function showMsg(text, color) {
+        msg.innerText = text;
+        msg.style.display = "block";
+        msg.style.color = color;
+    }
+</script>
 </body>
 </html>
